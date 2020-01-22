@@ -17,26 +17,38 @@
 // let bodytext = await response.json();
 // console.log(bodytext);
 
+docBody = document.body;
+const fragment = document.createDocumentFragment();
+const parentDiv = document.createElement("div");
+
 const div = document.createElement('div');
-document.body.append(div);
 const input = document.createElement('input');
 div.append(input);
 
-const button = document.createElement('button');
-button.innerText = 'ADD';
+const removeTag = function(event) {
+    event.target.remove();
+};
 
-button.addEventListener('click', function(){
+const CreateNewTag = function () {
     const str = input.value;
     if ((str =='') || (str == null) ) {
         console.log('error: Enter text!');
     }
     else{
         const p = document.createElement('p');
-        document.body.append(p);
+        parentDiv.append(p);
+        docBody.append(parentDiv);
         p.innerText = str;
     }
-});
+};
+
+const button = document.createElement('button');
+button.innerText = 'ADD';
+button.addEventListener('click', CreateNewTag);
+
 div.append(button);
+docBody.append(div);
+
 
 
 fetch('https://jsonplaceholder.typicode.com/todos')
@@ -45,11 +57,12 @@ fetch('https://jsonplaceholder.typicode.com/todos')
         for (let i = 0; i < arrresponse.length; i++) {
 
             const p = document.createElement('p');
-            document.body.append(p);
+            fragment.append(p);
             p.innerText = arrresponse[i].title;
-
-            p.addEventListener('click', function () {
-                p.remove();
-            });
-        }
+        };
+        parentDiv.append(fragment);
+        parentDiv.addEventListener("click", removeTag);
+        docBody.append(parentDiv);
     });
+
+
